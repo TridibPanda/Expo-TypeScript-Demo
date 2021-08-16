@@ -1,31 +1,25 @@
-import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { createStore, combineReducers, applyMiddleware  } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
 import AppNavigator from './navigation/AppNavigator';
+import RecipesReducer from './store/reducers/Recipes';
+import AuthReducer from './store/reducers/Auth';
 
+const rootReducer = combineReducers({
+  auth: AuthReducer,
+  recipes: RecipesReducer
+});
+
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk));
 
 export default function App() {
-  // const isLoadingComplete = useCachedResources();
-  // const colorScheme = useColorScheme();
-
-  // if (!isLoadingComplete) {
-  //   return null;
-  // } else {
-  //   return (
-  //     <SafeAreaProvider>
-  //       <Navigation colorScheme={colorScheme} />
-  //       <StatusBar />
-  //     </SafeAreaProvider>
-  //   );
-  // }
+  console.disableYellowBox = true;
   return (
-    <SafeAreaProvider>
-      <AppNavigator/>
-    </SafeAreaProvider>
-  )
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
+  );
 }
+

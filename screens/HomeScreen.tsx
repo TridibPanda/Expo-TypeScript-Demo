@@ -1,0 +1,154 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import {
+    View,
+    Text,
+    ScrollView,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+    ImageBackground
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { recipes } from '../store/actions/Recipes';
+import { logout, get } from '../store/actions/Auth';
+
+const Height = Dimensions.get('window').height > 660;
+const Width = Dimensions.get('window').width > 360;
+
+
+const HomeScreen = () => {
+
+    const navigation = useNavigation();
+    const listData = useSelector((state: any) => state.recipes.recipes);
+    const dispatch = useDispatch();
+
+    const datafn = () => {
+        dispatch(recipes());
+        dispatch(get());
+
+    };
+    useEffect(() => {
+        datafn();
+
+    }, [])
+
+    const logoutfn = () => {
+        dispatch(logout());
+    }
+    const edit = () => {
+        navigation.navigate('EditProfileScreen')
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AddRecipeScreen')}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Add Recipe</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={edit}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Edit Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={logoutfn}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Log-out</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView>
+                <View style={styles.list}>
+                    {listData.map((item: any, index: any) => {
+                        return (
+                            <TouchableOpacity style={styles.item} key={index} onPress={() => navigation.navigate('RecipeDetailsScreen', { recipeId: item.recipeId })}>
+                                <ImageBackground
+                                    source={{ uri: item.image }}
+                                    style={styles.bgImage}
+                                >
+                                    <View style={styles.titleContainer}>
+                                        <Text style={styles.title} numberOfLines={1}>
+                                            {item.recipeName}
+                                        </Text>
+                                    </View>
+
+                                </ImageBackground>
+                            </TouchableOpacity>
+                        )
+                    })}
+                </View>
+            </ScrollView>
+        </View>
+    )
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        // alignItems: 'center',
+        backgroundColor: "#80a1ad"
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 25
+    },
+    button: {
+        borderRadius: 20,
+        width: '27%',
+        backgroundColor: '#d19d00',
+        marginTop: 10
+    },
+    buttonText: {
+        padding: Height ? 15 : 10,
+        textAlign: 'center',
+        color: "white",
+        fontSize: 12,
+    },
+    list: {
+        flexDirection: 'row',
+        // justifyContent: 'space-around',
+        alignItems: 'flex-start',
+        padding: 15,
+        marginBottom: 80,
+        flexWrap: 'wrap',
+
+    },
+    emptyText: {
+        color: "white",
+        fontSize: 15,
+    },
+    item: {
+        height: 100,
+        width: 150,
+        backgroundColor: '#f5f5f5',
+        borderRadius: 10,
+        overflow: 'hidden',
+        margin: 5,
+        borderColor: '#fff',
+        borderWidth: 1
+    },
+    bgImage: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+    },
+    titleContainer: {
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        paddingVertical: 5,
+        paddingHorizontal: 12
+    },
+    title: {
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center'
+    }
+});
+
+export default HomeScreen;
