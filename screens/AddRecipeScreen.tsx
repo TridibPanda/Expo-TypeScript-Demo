@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
     View,
@@ -10,7 +10,6 @@ import {
     TouchableWithoutFeedback,
     TextInput,
     Keyboard,
-    Platform,
     Image,
     Button,
     Alert,
@@ -20,23 +19,20 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from "expo-file-system";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import Input from '../components/Input';
-import Firebase, { db } from '../config/Firebase';
 import { addRecipe} from '../store/actions/Recipes';
 
 const Height = Dimensions.get('window').height > 660;
 const Width = Dimensions.get('window').width > 360;
 
 
-const AddRecipeScreen = (props:any) => {
+const AddRecipeScreen = () => {
     const navigation = useNavigation();
     const [pickedImage, setPickedImage] = useState({ field: '', check: false });
     const [recipeName, setRecipeName] = useState({ field: '', check: false });
     const [ingredients, setIngredients] = useState({ field: '', check: false });
     const [direction, setDirection] = useState({ field: '', check: false });
-    const [imageId, setImageId] = useState(Math.random());
     const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
 

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,

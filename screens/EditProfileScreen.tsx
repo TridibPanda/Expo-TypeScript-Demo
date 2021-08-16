@@ -8,9 +8,7 @@ import {
 	Dimensions,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
-	TextInput,
 	Keyboard,
-	Platform
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
